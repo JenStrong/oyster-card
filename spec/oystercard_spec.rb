@@ -24,8 +24,21 @@ describe Oystercard do
 
     let(:station) { double :station }
 
-    it 'raises an error if insufficient funds on the card' do
-      expect { oystercard.touch_in(station) }.to raise_error "Insufficient funds"
+    describe '#touch_in' do
+      it 'raises an error if insufficient funds on the card' do
+        expect { oystercard.touch_in(station) }.to raise_error "Insufficient funds"
+      end
+
+      it 'starts a journey' do
+        journey_class_double = double :journey_class
+        journey_double = double :journey
+        allow(journey_class_double).to receive(:new).and_return(journey_double)
+
+        expect(journey_class_double).to receive(:new)
+        other_oyster_card = Oystercard.new(journey_class_double, 20)
+        other_oyster_card.touch_in("algate")
+
+      end
     end
 
     describe '#journey_history' do
